@@ -1,4 +1,4 @@
-FROM rockylinux:9
+FROM docker.io/rockylinux/rockylinux:9
 
 RUN dnf upgrade -y; \
     dnf install --enablerepo=crb -y \
@@ -35,29 +35,29 @@ RUN dnf upgrade -y; \
 
 RUN mkdir /qt6-src; \
     cd /qt6-src; \
-    wget https://download.qt.io/archive/qt/6.2/6.2.8/submodules/qtbase-everywhere-opensource-src-6.2.8.tar.xz; \
-    tar -xf qtbase-everywhere-opensource-src-6.2.8.tar.xz; \
+    wget -4 https://download.qt.io/archive/qt/6.6/6.6.3/submodules/qtbase-everywhere-src-6.6.3.tar.xz; \
+    tar -xf qtbase-everywhere-src-6.6.3.tar.xz; \
     mkdir qtbase-build; \
     cd qtbase-build; \
-    ../qtbase-everywhere-src-6.2.8/configure -xcb -prefix /qt6; \
+    ../qtbase-everywhere-src-6.6.3/configure -xcb -prefix /qt6; \
     cmake --build . --parallel; \
     cmake --install .; \
     cd ../; \
-    rm qtbase-everywhere-opensource-src-6.2.8.tar.xz; \
-    rm -rf qtbase-everywhere-src-6.2.8.tar.xz
+    rm qtbase-everywhere-src-6.6.3.tar.xz; \
+    rm -rf qtbase-everywhere-src-6.6.3
 
 RUN cd /qt6-src; \
-    wget https://download.qt.io/archive/qt/6.2/6.2.8/submodules/qtdeclarative-everywhere-opensource-src-6.2.8.tar.xz; \
-    tar -xf qtdeclarative-everywhere-opensource-src-6.2.8.tar.xz; \
-    cd qtdeclarative-everywhere-src-6.2.8; \
+    wget -4 https://download.qt.io/archive/qt/6.6/6.6.3/submodules/qtdeclarative-everywhere-src-6.6.3.tar.xz; \
+    tar -xf qtdeclarative-everywhere-src-6.6.3.tar.xz; \
+    cd qtdeclarative-everywhere-src-6.6.3; \
     cmake -G Ninja -DCMAKE_PREFIX_PATH=/qt6/lib/cmake; \
     cmake --build . --parallel; \
     cmake --install .; \
     cd ../; \
-    rm qtdeclarative-everywhere-opensource-src-6.2.8.tar.xz; \
-    rm -rf qtdeclarative-everywhere-src-6.2.8
+    rm qtdeclarative-everywhere-src-6.6.3.tar.xz; \
+    rm -rf qtdeclarative-everywhere-src-6.6.3
 
-RUN git clone -b v5.2.1 https://github.com/InsightSoftwareConsortium/ITK itk-src; \
+RUN git clone -b v5.4.0 https://github.com/InsightSoftwareConsortium/ITK itk-src; \
     mkdir itk-build; \
     cd itk-build; \
     cmake -GNinja \
@@ -69,7 +69,7 @@ RUN git clone -b v5.2.1 https://github.com/InsightSoftwareConsortium/ITK itk-src
         ../itk-src; \
     cmake --build . --parallel
 
-RUN git clone -b v9.1.0 --recursive https://gitlab.kitware.com/vtk/vtk.git /vtk-src; \
+RUN git clone -b v9.3.1 --recursive https://gitlab.kitware.com/vtk/vtk.git /vtk-src; \
     mkdir vtk-build; \
     cd vtk-build; \
     cmake -GNinja \
@@ -90,7 +90,7 @@ RUN git clone -b v9.1.0 --recursive https://gitlab.kitware.com/vtk/vtk.git /vtk-
 
 RUN git clone --recursive https://github.com/pyushkevich/itksnap.git itksnap-src; \
     cd itksnap-src; \
-    git checkout 0d79853; \
+    git checkout v4.2.2; \
     cd /; \
     mkdir itksnap-build; \
     cd itksnap-build; \
